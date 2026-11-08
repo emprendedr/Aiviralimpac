@@ -37,9 +37,10 @@ h1 .l:nth-child(2) span{animation-delay:.15s}h1 .l:nth-child(3) span{animation-d
 .ring{transform-box:fill-box;transform-origin:center;animation:ring 2.4s ease-out infinite}@keyframes ring{from{transform:scale(1);opacity:.7}to{transform:scale(1.7);opacity:0}}
 .sat{animation:float 4s ease-in-out infinite}.sat:nth-of-type(2){animation-delay:-1s}.sat:nth-of-type(3){animation-delay:-2s}.sat:nth-of-type(4){animation-delay:-3s}@keyframes float{50%{transform:translateY(-7px)}}
 .vwrap{margin-top:38px}
-.vbox{position:relative;aspect-ratio:16/9;border-radius:22px;overflow:hidden;border:2px solid var(--gold);background:radial-gradient(ellipse at 30% 30%,#4a0e16,#0b0505 70%);box-shadow:0 0 70px #ff2a3d33,0 30px 60px #000a}
-.vbox iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.vbox{position:relative;aspect-ratio:16/9;border-radius:22px;overflow:hidden;border:2px solid var(--gold);background:#0b0505;box-shadow:0 0 70px #ff2a3d33,0 30px 60px #000a}
+.vbox iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
 .vcta{display:flex;gap:18px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:26px}
+.skip{display:block;text-align:center;margin:16px auto 0;color:var(--gold);font-weight:800;font-size:14px;text-decoration:underline;background:none;border:0;cursor:pointer}
 section{padding:84px 0}
 .head2{max-width:660px;margin-bottom:38px}.head2 h2{font-size:clamp(30px,4.4vw,48px)}.head2 p{color:var(--muted);font-size:17px;margin:14px 0 0}
 .rv{opacity:0;transform:translateY(26px);transition:opacity .8s,transform .8s}.rv.in{opacity:1;transform:none}
@@ -118,9 +119,14 @@ footer{padding:16px 0 28px;color:#7e7272;font-size:12px}.foot{display:flex;justi
     </svg>
   </div>
   <div class="vwrap">
-    <div class="vbox" id="vbox">
-      <button class="play" id="play" aria-label="Reproducir el video"><span class="pb"></span><span>Mira el primer paso</span></button>
+    <div class="vbox">
+      <!-- Video cargado directamente: se muestra sin necesidad de clic -->
+      <iframe id="vid" src="https://streamable.com/e/wlzuso"
+              title="Video de presentación"
+              allow="autoplay; fullscreen; picture-in-picture"
+              allowfullscreen></iframe>
     </div>
+    <button class="skip" id="skip" type="button">¿Ya terminaste el video? Ir al registro →</button>
     <div class="vcta"><a class="btn" href="#acceso">Quiero la presentación completa</a></div>
   </div>
 </div></div>
@@ -178,9 +184,7 @@ footer{padding:16px 0 28px;color:#7e7272;font-size:12px}.foot{display:flex;justi
 <footer><div class="wrap foot"><span>© 2026 Comunidad Aiviralimpacto</span><span>Aprende · Automatiza · Impacta</span></div></footer>
 <script>
 /* ================= CONFIGURACIÓN ================= */
-const WA_NUMBER = '13232850508';               /* +1 323 285 0508 (EE.UU.) */
-const VIDEO_EMBED = 'https://streamable.com/e/wlzuso';
-const ACCION_AL_TERMINAR = 'formulario';        /* 'formulario' → baja al registro */
+const WA_NUMBER = '13232850508';   /* +1 323 285 0508 (EE.UU.) */
 
 const WA_VIDEO = 'https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(
   'Hola 👋 Acabo de ver el video de Comunidad Aiviralimpacto y quiero la presentación completa para empezar.'
@@ -192,26 +196,26 @@ document.querySelectorAll('.rv').forEach((el,i)=>{el.style.transitionDelay=(i%2)
 function count(el){const to=+el.dataset.to;if(matchMedia('(prefers-reduced-motion: reduce)').matches){el.textContent=to;return}const t0=performance.now();(function f(t){const p=Math.min((t-t0)/1600,1);el.textContent=Math.round(to*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(f)})(t0)}
 new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){e.target.querySelectorAll('[data-to]').forEach(count);o.unobserve(e.target)}}),{threshold:.3}).observe(document.querySelector('.score'));
 
-/* ================= VIDEO + REDIRECCIÓN AL TERMINAR ================= */
-const vbox   = document.getElementById('vbox');
-const playBtn= document.getElementById('play');
-const st     = document.getElementById('status');
+/* ================= AL TERMINAR EL VIDEO → IR AL REGISTRO ================= */
+const st = document.getElementById('status');
 let terminado = false;
 
-function alTerminarVideo(){
+function irAlRegistro(){
   if(terminado) return;
   terminado = true;
 
-  /* Baja al formulario de registro y lo resalta */
   document.getElementById('acceso').scrollIntoView({behavior:'smooth', block:'start'});
   document.querySelector('.form').classList.add('hl');
   st.style.color = '#176d4e';
   st.textContent = '¡Video terminado! Deja tus datos y te llevamos a WhatsApp.';
-  setTimeout(()=>document.getElementById('name').focus({preventScroll:true}), 800);
+  setTimeout(()=>document.getElementById('name').focus({preventScroll:true}), 900);
 }
 
-/* Normaliza los mensajes que pueda enviar el reproductor */
-function nombreEvento(d){
+/* Botón manual de respaldo */
+document.getElementById('skip').addEventListener('click', irAlRegistro);
+
+/* Detección del final del video (Streamable envía mensajes postMessage) */
+function textoEvento(d){
   if(typeof d === 'string') return d.toLowerCase();
   if(!d || typeof d !== 'object') return '';
   const out = [];
@@ -227,24 +231,11 @@ window.addEventListener('message', e=>{
   try { host = new URL(e.origin).hostname; } catch(_) { return; }
   if(!/(^|\.)streamable\.com$/.test(host)) return;
 
-  const tokens = nombreEvento(e.data).split(/[^a-z]+/);
-  if(tokens.some(t => ['ended','finish','finished','complete','completed'].includes(t))){
-    alTerminarVideo();
+  const tokens = textoEvento(e.data).split(/[^a-z]+/);
+  if(tokens.some(t=>['ended','end','finish','finished','complete','completed','video_ended'].includes(t))){
+    irAlRegistro();
   }
 });
-
-if(playBtn){
-  playBtn.addEventListener('click', ()=>{
-    const f = document.createElement('iframe');
-    f.src = VIDEO_EMBED + '?autoplay=1';
-    f.allow = 'autoplay; fullscreen; picture-in-picture';
-    f.allowFullscreen = true;
-    f.title = 'Video de presentación';
-
-    playBtn.remove();
-    vbox.appendChild(f);
-  });
-}
 
 /* ================= FORMULARIO ================= */
 const form = document.getElementById('leadForm');
