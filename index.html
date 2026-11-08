@@ -39,20 +39,7 @@ h1 .l:nth-child(2) span{animation-delay:.15s}h1 .l:nth-child(3) span{animation-d
 .vwrap{margin-top:38px}
 .vbox{position:relative;aspect-ratio:16/9;border-radius:22px;overflow:hidden;border:2px solid var(--gold);background:radial-gradient(ellipse at 30% 30%,#4a0e16,#0b0505 70%);box-shadow:0 0 70px #ff2a3d33,0 30px 60px #000a}
 .vbox iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-.play{position:absolute;inset:0;width:100%;display:flex;flex-direction:column;gap:14px;align-items:center;justify-content:center;background:none;border:0;color:#fff;cursor:pointer}
-.play .pb{width:86px;height:86px;border-radius:50%;background:var(--red);display:grid;place-items:center;animation:pulse 2.2s infinite;transition:transform .2s}.play:hover .pb{transform:scale(1.1)}
-.play .pb::after{content:"";margin-left:6px;border-left:26px solid #fff;border-block:16px solid transparent}
-.play span{font-family:var(--disp);font-weight:800;font-size:clamp(18px,3vw,26px)}
 .vcta{display:flex;gap:18px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:26px}
-.vcta small{color:var(--muted);font-size:13px}.vcta a.alt{color:var(--gold);font-weight:700}
-/* --- aviso de redirección al terminar el video --- */
-.vend{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;padding:22px;background:#050505ee;backdrop-filter:blur(4px)}
-.vend[hidden]{display:none}
-.vend p{margin:0;font-family:var(--disp);font-weight:800;font-size:clamp(17px,3vw,26px);color:#fff}
-.vend p b{color:var(--gold)}
-.vend .btn{animation:pulse 1.4s infinite}
-.skip{display:block;text-align:center;margin:14px auto 0;color:var(--gold);font-weight:800;font-size:14px;text-decoration:underline}
-.skip[hidden]{display:none}
 section{padding:84px 0}
 .head2{max-width:660px;margin-bottom:38px}.head2 h2{font-size:clamp(30px,4.4vw,48px)}.head2 p{color:var(--muted);font-size:17px;margin:14px 0 0}
 .rv{opacity:0;transform:translateY(26px);transition:opacity .8s,transform .8s}.rv.in{opacity:1;transform:none}
@@ -99,7 +86,7 @@ section{padding:84px 0}
 .fine{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-size:12px}
 footer{padding:16px 0 28px;color:#7e7272;font-size:12px}.foot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 @media(max-width:850px){.hGrid,.iGrid,.mvg,.grid,.steps{grid-template-columns:1fr}.hub{display:none}.steps::before{display:none}.steps{gap:30px}section{padding:60px 0}.hero{padding:40px 0 50px}.vwrap{margin-top:30px}.iGrid{gap:34px}}
-@media(max-width:520px){.wrap{padding:0 18px}.form{padding:22px}.brand span{font-size:14px}.brand img{height:28px}.nav{font-size:12px;padding:9px 13px}.btn{width:100%}.play .pb{width:64px;height:64px}.play .pb::after{border-left-width:20px;border-block-width:12px}}
+@media(max-width:520px){.wrap{padding:0 18px}.form{padding:22px}.brand span{font-size:14px}.brand img{height:28px}.nav{font-size:12px;padding:9px 13px}.btn{width:100%}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}h1 .l span,.lead,.rv{opacity:1!important;transform:none!important}.col i{height:var(--h)!important}.steps::before{width:84%}}
 .score{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
 .tile{background:linear-gradient(160deg,#1a0a0d,#0d0a05);border:1px solid var(--line);border-radius:20px;padding:24px 20px;transition:border-color .3s,transform .3s}
@@ -133,13 +120,8 @@ footer{padding:16px 0 28px;color:#7e7272;font-size:12px}.foot{display:flex;justi
   <div class="vwrap">
     <div class="vbox" id="vbox">
       <button class="play" id="play" aria-label="Reproducir el video"><span class="pb"></span><span>Mira el primer paso</span></button>
-      <div class="vend" id="vend" hidden>
-        <p>¡Listo! Te llevamos a <b>WhatsApp</b>…</p>
-        <a class="btn" id="vendBtn" href="https://wa.me/573232850508" target="_blank" rel="noopener">Continuar ahora</a>
-      </div>
     </div>
-    <div class="vcta"><a class="btn" href="#acceso">Quiero la presentación completa</a><small>Gratis · Sin compromiso · <a class="alt" id="alt" href="https://streamable.com/wlzuso" target="_blank" rel="noopener">¿No carga? Ábrelo aquí</a></small></div>
-    <a class="skip" id="skip" href="https://wa.me/573232850508" target="_blank" rel="noopener" hidden>¿Ya terminaste el video? Continuar a WhatsApp →</a>
+    <div class="vcta"><a class="btn" href="#acceso">Quiero la presentación completa</a></div>
   </div>
 </div></div>
 
@@ -196,9 +178,9 @@ footer{padding:16px 0 28px;color:#7e7272;font-size:12px}.foot{display:flex;justi
 <footer><div class="wrap foot"><span>© 2026 Comunidad Aiviralimpacto</span><span>Aprende · Automatiza · Impacta</span></div></footer>
 <script>
 /* ================= CONFIGURACIÓN ================= */
-const WA_NUMBER = '573232850508';               /* 57 (Colombia) + 323 285 0608 */
+const WA_NUMBER = '13232850508';               /* +1 323 285 0508 (EE.UU.) */
 const VIDEO_EMBED = 'https://streamable.com/e/wlzuso';
-const ACCION_AL_TERMINAR = 'whatsapp';          /* 'whatsapp' → abre tu chat | 'formulario' → baja al registro */
+const ACCION_AL_TERMINAR = 'formulario';        /* 'formulario' → baja al registro */
 
 const WA_VIDEO = 'https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(
   'Hola 👋 Acabo de ver el video de Comunidad Aiviralimpacto y quiero la presentación completa para empezar.'
@@ -213,29 +195,19 @@ new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){e.target.qu
 /* ================= VIDEO + REDIRECCIÓN AL TERMINAR ================= */
 const vbox   = document.getElementById('vbox');
 const playBtn= document.getElementById('play');
-const vend   = document.getElementById('vend');
-const vendBtn= document.getElementById('vendBtn');
-const skip   = document.getElementById('skip');
 const st     = document.getElementById('status');
 let terminado = false;
 
 function alTerminarVideo(){
   if(terminado) return;
   terminado = true;
-  vendBtn.href = WA_VIDEO;
 
-  if(ACCION_AL_TERMINAR === 'whatsapp'){
-    /* Muestra aviso y redirige a tu WhatsApp */
-    vend.hidden = false;
-    setTimeout(()=>{ location.href = WA_VIDEO; }, 1600);
-  } else {
-    /* Baja al botón de registro y lo resalta */
-    document.getElementById('acceso').scrollIntoView({behavior:'smooth', block:'start'});
-    document.querySelector('.form').classList.add('hl');
-    st.style.color = '#176d4e';
-    st.textContent = '¡Video terminado! Deja tus datos y te llevamos a WhatsApp.';
-    setTimeout(()=>document.getElementById('name').focus({preventScroll:true}), 800);
-  }
+  /* Baja al formulario de registro y lo resalta */
+  document.getElementById('acceso').scrollIntoView({behavior:'smooth', block:'start'});
+  document.querySelector('.form').classList.add('hl');
+  st.style.color = '#176d4e';
+  st.textContent = '¡Video terminado! Deja tus datos y te llevamos a WhatsApp.';
+  setTimeout(()=>document.getElementById('name').focus({preventScroll:true}), 800);
 }
 
 /* Normaliza los mensajes que pueda enviar el reproductor */
@@ -270,11 +242,7 @@ if(playBtn){
     f.title = 'Video de presentación';
 
     playBtn.remove();
-    vbox.insertBefore(f, vend);        /* el iframe va debajo del aviso */
-
-    skip.href = WA_VIDEO;
-    /* Respaldo: si el reproductor no avisa el final, aparece el enlace a los 10 s */
-    setTimeout(()=>{ skip.hidden = false; }, 10000);
+    vbox.appendChild(f);
   });
 }
 
